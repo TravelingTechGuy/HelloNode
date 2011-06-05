@@ -14,12 +14,16 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class HelloNode extends Activity implements OnClickListener {
-    /** Called when the activity is first created. */
+	private TextView resultText;
+    
+	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         ((Button)findViewById(R.id.buttonRefresh)).setOnClickListener(this);
+        resultText = (TextView) findViewById(R.id.textResult);
+        getNodeReply();
     }
 
 	public void onClick(View v) {
@@ -39,8 +43,10 @@ public class HelloNode extends Activity implements OnClickListener {
 			reply = e.getMessage();
 		}
 		if(reply != null) {
-			TextView t = (TextView) findViewById(R.id.textResult);
-			t.setText(reply);
+			resultText.setText(reply);
+		}
+		else {
+			resultText.setText("Error occured");
 		}
 	}
 }
