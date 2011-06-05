@@ -1,0 +1,6 @@
+This project serves as a practice ground for both Android and Node.js development.
+
+Basically, the Android client comminicates with a very simple Node script (found in the Node folder) over port 3000.
+This assumes both Node and the Android emulator run on the same machine (hence the 10.0.2.2 address - basically "localhost" for the emulator).
+
+As my grasp of the 2 technologies grows, I'll add more functionality to the Node script, and more UI to the the Android client.
