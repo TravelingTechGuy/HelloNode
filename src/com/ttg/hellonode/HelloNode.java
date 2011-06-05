@@ -8,16 +8,26 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 
-public class HelloNode extends Activity {
+public class HelloNode extends Activity implements OnClickListener {
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
-        //setContentView(R.layout.main);
-        TextView tv = new TextView(this);
-        HttpHelper http = new HttpHelper();
+        setContentView(R.layout.main);
+        ((Button)findViewById(R.id.buttonRefresh)).setOnClickListener(this);
+    }
+
+	public void onClick(View v) {
+		getNodeReply();
+	}
+
+	private void getNodeReply() {
+		HttpHelper http = new HttpHelper();
         ArrayList<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("type", "json"));
         String reply;
@@ -29,8 +39,8 @@ public class HelloNode extends Activity {
 			reply = e.getMessage();
 		}
 		if(reply != null) {
-			tv.setText(reply);
-			setContentView(tv);
+			TextView t = (TextView) findViewById(R.id.textResult);
+			t.setText(reply);
 		}
-    }
+	}
 }
