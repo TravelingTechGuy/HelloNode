@@ -9,6 +9,8 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.SystemClock;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,6 +20,8 @@ import android.widget.TextView;
 public class HelloNode extends Activity implements OnClickListener {
 	private TextView resultText;
 	private String url = "http://10.0.2.2:3000";
+	private ProgressDialog dialog;
+	private Handler handler;
     
 	/** Called when the activity is first created. */
     @Override
@@ -34,7 +38,25 @@ public class HelloNode extends Activity implements OnClickListener {
 	}
 
 	private void getNodeReply() {
-		ProgressDialog dialog = ProgressDialog.show(this, "", "Loading. Please wait...", false);
+		dialog = ProgressDialog.show(this, "", "Loading. Please wait...", true);
+		handler = new Handler() {
+	        @Override
+	        public void handleMessage(Message msg) {
+	        	dialog.dismiss();
+	            resultText.setText(msg.obj.toString());
+	        }
+		};
+		new Thread() {
+			public void run() {
+				Message msg = new Message();
+				msg.obj = makeHttpRequest();
+				SystemClock.sleep(500);
+				handler.sendMessage(msg);
+			}
+		}.start();
+	}
+	
+	private String makeHttpRequest() {
 		HttpHelper http = new HttpHelper();
         ArrayList<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("type", "json"));
@@ -49,8 +71,6 @@ public class HelloNode extends Activity implements OnClickListener {
 		if(reply == null) {
 			reply = "Error occured";
 		}
-		resultText.setText(reply);
-		//SystemClock.sleep(2000);
-		dialog.dismiss();
+		return reply;
 	}
 }
